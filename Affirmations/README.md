@@ -15,6 +15,10 @@ Pre-requisites
 * Experience building layouts with Jetpack Compose
 * Experience running apps on a device or emulator
 
+Images
+---------
+<img src="https://github.com/nasuh-unal/ComposeTutorial/assets/88931522/9640dc81-b340-4c5e-a399-b420df902ce2" width=300 height=600>
+
 
 Getting Started
 ---------------
