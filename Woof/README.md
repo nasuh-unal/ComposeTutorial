@@ -6,24 +6,23 @@ The Woof app is a list of dog photos with information about them including their
 Introduction
 ------------
 
-This is the starter code for the Woof app project. This project is an opportunity for you to learn Material3 and reinforce the concepts you've learned so far in Android Basics with Compose.
+In this codelab, you learn about Material Theming, which allows you to use Material Design in your app, with guidance on customizing colors, typography, and shapes. You can customize as little, or as much, as you like for your app. You also learn how to add a top app bar to display the app's name and icon.
 
-Pre-requisites
---------------
+What have I learnt?
+------------
 
-- Rows/Columns
-- Modifiers
-- Scaffold
-- Adding images
-- Button click handlers
-- Functions
-- Classes
-- Lists
-- App architecture
+- How to apply Material Theming to a Compose app.
+- How to add a custom color palette to your app.
+- How to add custom fonts to your app.
+- How to add custom shapes to elements in your app.
+- How to add a top app bar to your app.
+- How to build a simple spring animation with Jetpack Compose.
 
-Getting Started
----------------
+App Video
+------------
 
-1. Download the project
-2. Open the project in Android Studio
-3. Run the project
+[device-2023-10-23-130725.webm](https://github.com/nasuh-unal/ComposeTutorial/assets/88931522/cb8ac967-03e1-45d1-b6cc-7bb22b30b4ea)
+
+
+
+
