@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package com.example.unscramble.ui
-
 import android.app.Activity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -59,10 +58,12 @@ import com.example.unscramble.R
 import com.example.unscramble.ui.theme.UnscrambleTheme
 
 @Composable
-fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
-
+fun GameScreen(
+    gameViewModel: GameViewModel = viewModel()
+) {
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
-    val gameUiState by gameViewModel.uiState.collectAsState()
+    val gameUiState by gameViewModel.uiState.collectAsState() //uistate değerinde bir değşiklik olduğunda
+    // bu değeri kullanan composeable'da update yapar
 
     Column(
         modifier = Modifier
@@ -78,11 +79,12 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
         )
 
         GameLayout(
-            currentScrambledWord = gameUiState.currentScrambledWord,
-            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },
-            userGuess = gameViewModel.userGuess,
-            onKeyboardDone = { },
-
+            currentScrambledWord = gameUiState.currentScrambledWord, // güncel karıştırılmış kelime
+            onUserGuessChanged = { gameViewModel.updateUserGuess(it) },// kullanıcı tahmin değişikliği
+            userGuess = gameViewModel.userGuess,//girdiğimiz kelime
+            onKeyboardDone = {gameViewModel.checkUserGuess()},
+            wordCount = gameUiState.currentWordCount,
+            isGuessWrong = gameUiState.isGuessedWordWrong,
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()
@@ -98,7 +100,7 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { }
+                onClick = { gameViewModel.checkUserGuess() } //kontrol yapılıyor
             ) {
                 Text(
                     text = stringResource(R.string.submit),
@@ -107,7 +109,7 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
             }
 
             OutlinedButton(
-                onClick = { },
+                onClick = { gameViewModel.skipWord() },
                 modifier = Modifier.fillMaxWidth()
 
             ) {
@@ -118,30 +120,26 @@ fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
             }
         }
 
-        GameStatus(score = 0, modifier = Modifier.padding(20.dp))
+        GameStatus(score=gameUiState.score, modifier = Modifier.padding(20.dp))
     }
-}
-
-@Composable
-fun GameStatus(score: Int, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier
-    ) {
-        Text(
-            text = stringResource(R.string.score, score),
-            style = typography.headlineMedium,
-            modifier = Modifier.padding(8.dp)
+    if (gameUiState.isGameOver) {
+        FinalScoreDialog(
+            score = gameUiState.score,
+            onPlayAgain = { gameViewModel.resetGame() }
         )
     }
 }
 
 @Composable
 fun GameLayout(
-    onUserGuessChanged: (String) -> Unit,
-    onKeyboardDone: () -> Unit,
-    currentScrambledWord: String,
+    onUserGuessChanged: (String) -> Unit,//kullanıcı girdisini değişikiliği aşağıya gönderir--textbox
+    onKeyboardDone: () -> Unit,//
+    currentScrambledWord: String,//karıştırıp aşağıya yolluyor--text
     modifier: Modifier = Modifier,
-    userGuess:String
+    isGuessWrong: Boolean,
+    wordCount:Int,
+    userGuess: String
+
 ) {
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
@@ -160,7 +158,7 @@ fun GameLayout(
                     .background(colorScheme.surfaceTint)
                     .padding(horizontal = 10.dp, vertical = 4.dp)
                     .align(alignment = Alignment.End),
-                text = stringResource(R.string.word_count, 0),
+                text = stringResource(R.string.word_count, wordCount),
                 style = typography.titleMedium,
                 color = colorScheme.onPrimary
             )
@@ -173,8 +171,8 @@ fun GameLayout(
                 textAlign = TextAlign.Center,
                 style = typography.titleMedium
             )
-            OutlinedTextField(
-                value = userGuess,
+            OutlinedTextField(//kelime girdisi
+                value = userGuess,//girdiğimiz kelime
                 singleLine = true,
                 shape = shapes.large,
                 modifier = Modifier.fillMaxWidth(),
@@ -183,14 +181,18 @@ fun GameLayout(
                     unfocusedContainerColor = colorScheme.surface,
                     disabledContainerColor = colorScheme.surface,
                 ),
-                onValueChange = onUserGuessChanged,
-                label = { Text(stringResource(R.string.enter_your_word)) },
-                isError = false,
+                onValueChange = onUserGuessChanged, //değişikliği algılaması
+                label = { if (isGuessWrong) {//yanlış olduğunda tekara gir der
+                    Text(stringResource(R.string.wrong_guess))
+                } else {
+                    Text(stringResource(R.string.enter_your_word))
+                } },
+                isError = isGuessWrong,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(
-                    onDone = { onKeyboardDone() }
+                    onDone = { onKeyboardDone() }//////
                 )
             )
         }
@@ -234,6 +236,18 @@ private fun FinalScoreDialog(
     )
 }
 
+@Composable
+fun GameStatus(score :Int , modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.score, score),
+            style = typography.headlineMedium,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
