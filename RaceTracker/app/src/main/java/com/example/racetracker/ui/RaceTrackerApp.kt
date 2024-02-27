@@ -1,5 +1,4 @@
 package com.example.racetracker.ui
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,14 +36,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.racetracker.R
 import com.example.racetracker.ui.theme.RaceTrackerTheme
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun RaceTrackerApp() {
-    /**
-     * Note: To survive the configuration changes such as screen rotation, [rememberSaveable] should
-     * be used with custom Saver object. But to keep the example simple, and keep focus on
-     * Coroutines that implementation detail is stripped out.
-     */
     val playerOne = remember {
         RaceParticipant(name = "Player 1", progressIncrement = 1)
     }
@@ -52,6 +51,16 @@ fun RaceTrackerApp() {
     }
     var raceInProgress by remember { mutableStateOf(false) }
 
+    if (raceInProgress) {
+        LaunchedEffect(playerOne, playerTwo) {
+            coroutineScope {
+                launch { playerOne.run() }
+                launch { playerTwo.run() }
+            }
+            //delay(20000)
+            raceInProgress = false
+        }
+    }
     RaceTrackerScreen(
         playerOne = playerOne,
         playerTwo = playerTwo,
@@ -131,10 +140,11 @@ private fun RaceTrackerScreen(
     }
 }
 
+//çubuk ve oyuncu bilgileri
 @Composable
 private fun StatusIndicator(
-    participantName: String,
-    currentProgress: Int,
+    participantName: String,//katılımcı adı
+    currentProgress: Int,//ilerleme
     maxProgress: String,
     progressFactor: Float,
     modifier: Modifier = Modifier
@@ -180,18 +190,20 @@ private fun RaceControls(
     onRunStateChange: (Boolean) -> Unit,
     onReset: () -> Unit,
     modifier: Modifier = Modifier,
-    isRunning: Boolean = true,
+    isRunning: Boolean,//buton için
 ) {
     Column(
         modifier = modifier.padding(top = dimensionResource(R.dimen.padding_medium)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_medium))
     ) {
+        //Duruma göre değişen start ve pause butonu
         Button(
             onClick = { onRunStateChange(!isRunning) },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(if (isRunning) stringResource(R.string.pause) else stringResource(R.string.start))
         }
+        //Reset butonu
         OutlinedButton(
             onClick = onReset,
             modifier = Modifier.fillMaxWidth(),
