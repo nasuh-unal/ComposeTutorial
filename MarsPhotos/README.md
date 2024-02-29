@@ -120,3 +120,25 @@ Bazen JSON yanıtındaki anahtar adları, Kotlin özelliklerini kafa karıştır
 
 Veri sınıfınızda JSON yanıtındaki anahtar adlarından farklı değişken adları kullanmak için @SerialName ek açıklamasını kullanın. Aşağıdaki örnekte, veri sınıfındaki değişkenin adı imgSrc'dir. Değişken, @SerialName(value = "img_src") kullanılarak JSON özniteliği img_src ile eşleştirilebilir.
 
+REST web servisleri
+-------------------
+- Web servisi, uygulamanızın istekte bulunmasını ve verileri geri almasını sağlayan, internet üzerinden sunulan yazılım tabanlı bir işlevdir.
+- Yaygın web hizmetleri bir REST mimarisi kullanır. REST mimarisi sunan web servisleri RESTful servisler olarak bilinir. RESTful web servisleri, standart web bileşenleri ve protokolleri kullanılarak oluşturulur.
+- Bir REST web servisine URI'ler aracılığıyla standartlaştırılmış bir şekilde istekte bulunursunuz.
+- Bir web servisini kullanmak için uygulamanın bir ağ bağlantısı kurması ve servisle iletişim kurması gerekir. Ardından uygulama, yanıt verilerini almalı ve uygulamanın kullanabileceği bir biçime dönüştürmelidir.
+- Retrofit kütüphanesi, uygulamanızın bir REST web servisine istekte bulunmasını sağlayan bir istemci kütüphanesidir.
+- Retrofit'e web servisine gönderdiği ve web servisinden geri aldığı verilerle ne yapacağını söylemek için dönüştürücüleri kullanın. Örneğin, ScalarsConverter web hizmeti verilerini bir String veya başka bir ilkel olarak ele alır.
+- Uygulamanızın internete bağlantı kurmasını sağlamak için Android manifestosuna "android.permission.INTERNET" iznini ekleyin.
+- Lazy initialization, bir nesnenin oluşturulmasını ilk kez kullanılacağı zamana devreder. Referans oluşturur ancak nesneyi oluşturmaz. Bir objeye ilk kez erişildiğinde, bir referans oluşturulur ve bundan sonraki her seferinde kullanılır.
+
+JSON parsing
+---------------------
+- Bir web servisinden gelen yanıt genellikle yapılandırılmış verileri temsil etmek için yaygın bir format olan JSON ile biçimlendirilir.
+- JSON nesnesi, anahtar-değer çiftlerinden oluşan bir koleksiyondur.
+- JSON nesneleri koleksiyonu bir JSON dizisidir. Bir web servisinden yanıt olarak bir JSON dizisi alırsınız.
+- Bir anahtar-değer çiftindeki anahtarlar **tırnak işaretleriyle** çevrelenir. Değerler sayılar veya dizeler olabilir.
+- Kotlin'de, veri serileştirme araçları kotlinx.serialization adlı ayrı bir bileşende mevcuttur. Kotlinx.serialization, bir JSON dizesini Kotlin nesnelerine dönüştüren kütüphane setleri sağlar.
+- Retrofit için topluluk tarafından geliştirilen bir Kotlin Serileştirme Dönüştürücü kütüphanesi vardır: retrofit2-kotlinx-serialization-converter.
+- Kotlinx.serialization, bir JSON yanıtındaki anahtarları bir veri nesnesindeki aynı ada sahip özelliklerle eşleştirir.
+- Bir anahtar için farklı bir özellik adı kullanmak için, bu özelliğe @SerialName ek açıklamasını ve JSON anahtar değerini ekleyin.
+
