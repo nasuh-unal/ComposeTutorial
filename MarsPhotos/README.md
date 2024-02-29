@@ -24,6 +24,10 @@ Ne yapacaksınız
 Notlarım
 =================================
 
+ViewModelScope
+---------------
+Uygulamanızdaki her ViewModel için bir ViewModelScope tanımlanır. Bu scope içinde başlatılan herhangi bir coroutine, ViewModel temizlendiğinde otomatik olarak iptal edilir. Coroutine'ler, yalnızca ViewModel etkin olduğunda yapılması gereken işleriniz olduğunda kullanışlıdır. Örneğin, bir layout için bazı verileri hesaplıyorsanız, ViewModel temizlendiğinde kaynakların tüketilmesini önlemek için işin otomatik olarak iptal edilmesi için işi ViewModel'e kapsamlandırmalısınız.
+
 Web services and Retrofit
 ---------------
 
