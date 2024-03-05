@@ -1,5 +1,4 @@
 package com.example.marsphotos.ui.screens
-
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
@@ -15,18 +14,19 @@ import com.example.marsphotos.data.MarsPhotosRepository
 import com.example.marsphotos.data.NetworkMarsPhotosRepository
 import com.example.marsphotos.model.MarsPhoto
 import com.example.marsphotos.network.MarsApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface MarsUiState {
-    data class Success(val photos: String) : MarsUiState
+    data class Success(val photos: List<MarsPhoto>) : MarsUiState
     object Error : MarsUiState
     object Loading : MarsUiState
 }
 
 class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : ViewModel() {
-    /** The mutable State that stores the status of the most recent request */
+
     var marsUiState: MarsUiState by mutableStateOf(MarsUiState.Loading)
         private set
 
@@ -36,7 +36,6 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
 
     fun getMarsPhotos() {
         viewModelScope.launch {
-            //delay(5000)
             /*
             ViewModel'in veriler için doğrudan ağ isteği yapması yerine, repository verileri sağlar.
             ViewModel artık doğrudan MarsApi koduna başvurmaz.
@@ -45,11 +44,12 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
             ViewModel veya depoda diğerini olumsuz etkilemeden değişiklik yapılmasına olanak tanır.
              */
             marsUiState = MarsUiState.Loading
+            delay(2000)
             marsUiState = try {
-                //val marsPhotosRepository = NetworkMarsPhotosRepository()
-                val listResult = marsPhotosRepository.getMarsPhotos()
+                //val marsPhotosRepository = NetworkMarsPhotosRepository() constructor'a yazdığımız için bunu kaldırdık
+                val result = marsPhotosRepository.getMarsPhotos()
                 //val listResult = MarsApi.retrofitService.getPhotos()
-                MarsUiState.Success("Success: ${listResult.size} Mars photos retrieved")
+                MarsUiState.Success(/*"Success: ${result.imgSrc} Mars photos retrieved"*/ result)
             } catch (e: IOException) {
                 MarsUiState.Error
             } catch (e: HttpException) {
@@ -57,7 +57,8 @@ class MarsViewModel(private val marsPhotosRepository: MarsPhotosRepository) : Vi
             }
         }
     }
-
+    //ViewModel'e bir parametre aktarmak istediğimizde viewModelFactory yardımı alarak parametre aktarabiliriz
+    //Componaion object bir sınıfın nesnesini oluşturmadan ona erişim sağlamamızı sağlar
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

@@ -92,5 +92,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
 }
