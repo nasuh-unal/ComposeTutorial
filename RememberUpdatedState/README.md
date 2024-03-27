@@ -1,10 +1,6 @@
-Remember Coroutine Scope
+Remember Updated State
 =====================
 
-Remember coroutine scope async işlemleri yürütmemiz için kullanılan bir scope'dur. Compose fonksiyonlar oluşabilecek değişikliklerde hemen kendilerini yeniden çizerler bu yüzden yaşam döngülerini yönetebiliriz.
+Bir composable'ın state'inin güncel tutmak için kullanılan bir fonksiyondur. Örneğin LaunchEFfect içerisinde çağırılacak bir değerin gelmesi zaman alabilir istek yapıldıktan sonra değer değişirse bu değeri güncel tutmaya yarar.
 
-- Kodları bloklamaz async şekilde yürütür.
-- Scope içerisinde oluşabilecek değişiklikler compose'u yeniden çizmez.
-- Scope içerisinde diğer state'leri etkilerse UI yeniden çizdirilir.
-- Dışarıdan bir coroutine alabiliriz.
-- Coroutine'i tetiklememiz sonucu çağırmak istiyorsak LaunchEffect yerine Remember Coroutine Scope kullanmalıyız.
+
