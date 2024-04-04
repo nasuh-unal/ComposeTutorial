@@ -1,10 +1,8 @@
-Remember Coroutine Scope
+Produce State
 =====================
 
-Remember coroutine scope async işlemleri yürütmemiz için kullanılan bir scope'dur. Compose fonksiyonlar oluşabilecek değişikliklerde hemen kendilerini yeniden çizerler bu yüzden yaşam döngülerini yönetebiliriz.
+ProduceState ise, Jetpack Compose'da bir Composable'in state'ini otomatik olarak güncellemesi için kullanılan bir fonksiyondur.
 
-- Kodları bloklamaz async şekilde yürütür.
-- Scope içerisinde oluşabilecek değişiklikler compose'u yeniden çizmez.
-- Scope içerisinde diğer state'leri etkilerse UI yeniden çizdirilir.
-- Dışarıdan bir coroutine alabiliriz.
-- Coroutine'i tetiklememiz sonucu çağırmak istiyorsak LaunchEffect yerine Remember Coroutine Scope kullanmalıyız.
+ProduceState, state'in başlangıç değerini ve bir suspend fonksiyonu alır. Suspend fonksiyonu, state'in güncellenmesi gerektiği zamanlarda çalıştırılabilir.
+
+Suspend fun bir değer dönderdiğinde state kendisini günceller.
