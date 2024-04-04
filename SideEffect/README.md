@@ -7,12 +7,3 @@ Side Effect
 
  - Compose state'ini compose tarafından yönetilmeyen nesnelerle paylaşmak için SideEffect composable kullanın. Bir SideEffect kullanmak, efektin her başarılı recompositiondan sonra yürütülmesini garanti eder.
 
-- Compose olmayan herhangi bir değer değiştirilirse, yeniden birleştirme gerçekleşmeyecektir.
-
-- fetchData() ağ çağrısı kullanıcı tarafından birden çok kez çağrılabilir, bu da bir seferde yüksek miktarda istek alarak sunucunun aşırı yüklenmesine neden olur
-
-- fetchData() ağ çağrısının yanıt vermesi veya sunucudan uygulamaya veri göndermesi daha uzun sürebilir
-
-- Bu sorunları çözmek için SideEffect, parent composable'ın recomposition olması API çağrıları, korutin yürütme vb. gibi asenkron işlemleri yürütür.
-
-
